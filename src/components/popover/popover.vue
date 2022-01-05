@@ -35,8 +35,12 @@ const stop = (e: Event) => e.stopPropagation();
   name: "Popover"
 })
 export default class Dialog extends Vue {
-  visible = false;
   arrowAppended = false;
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  visible!: boolean;
   @Prop({
     type: Number,
     default: 0
@@ -67,7 +71,7 @@ export default class Dialog extends Vue {
     }
   }
   toggle() {
-    this.visible = !this.visible;
+    this.$emit("update:visible", !this.visible);
   }
   getPopRect(domPop: HTMLElement) {
     if (!domPop) return new DOMRect();
@@ -139,14 +143,14 @@ export default class Dialog extends Vue {
         // 外部点击事件传入 popover，则popover组件不做任何处理
       return;
     } else {
-      this.visible = false;
+      this.$emit("update:visible", false);
     }
   }
   handleMouseEnter() {
-    this.visible = true;
+    this.$emit("update:visible", true);
   }
   handleMouseLeave() {
-    this.visible = false;
+    this.$emit("update:visible", false);
   }
   handleResize() {
     this.updatePop();
