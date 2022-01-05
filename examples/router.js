@@ -9,17 +9,25 @@ import Vue from "vue";
 Vue.use(Router);
 import Content from "./Content.vue";
 import Dialog from "./dialog";
+import Popover from "./popover";
 const router = new Router({
   routes: [
     {
       path: "/",
       name: "content",
-      component: Content
-    },
-    {
-      path: "/dialog",
-      name: "dialog",
-      component: Dialog
+      component: Content,
+      children: [
+        {
+          path: "dialog",
+          name: "dialog",
+          component: Dialog
+        },
+        {
+          path: "popover",
+          name: "popover",
+          component: Popover
+        }
+      ]
     }
   ]
 });

@@ -1,6 +1,6 @@
 <template>
   <div id="example">
-    <router-view slot="body"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 <script type="text/javascript">

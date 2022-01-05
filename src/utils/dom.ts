@@ -1,3 +1,9 @@
+export const on = (el: Document | HTMLElement, eventName: string, cb: (e: Event) => void) => {
+  el.addEventListener(eventName, cb);
+}
+export const off = (el: Document | HTMLElement, eventName: string, cb: (e: Event) => void) => {
+  el.removeEventListener(eventName, cb);
+}
 export const hasClass = (el: HTMLElement, cls: string) => {
   if (!el || !cls) return false;
   if (cls.indexOf(' ') !== -1) throw new Error("className should not contain space.");
