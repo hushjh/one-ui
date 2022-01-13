@@ -4,6 +4,7 @@
     <Popover
       :visible.sync="popoverVisible1"
       :width="200"
+      :title="'提示'"
     >
       <template v-slot:reference>
         <button >click激活,下边展示</button>
@@ -12,6 +13,7 @@
     <Popover
       :visible.sync="popoverVisible2"
       :placement="'top'"
+      :width="150"
     >
       <template v-slot:reference>
         <button >click激活,上边展示</button>
