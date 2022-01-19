@@ -1,11 +1,11 @@
 {
   "name": "one-wsz-ui",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "author": "772074834qq.com",
   "private": false,
   "main": "lib/one-wsz-ui.umd.min.js",
   "files": [
-    "/lib",
+    "/lib/*.js",
     "/types"
   ],
   "typings": "types/index.d.ts",
