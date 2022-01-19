@@ -24,12 +24,12 @@
 import Vue from "vue";
 import "./style/index.scss";
 import { Component } from "vue-property-decorator";
-import Dialog from "@/components/dialog";
+// import Dialog from "@/components/dialog";
 @Component({
-  name: "dialogPage",
-  components: {
-    Dialog
-  }
+  name: "dialogPage"
+  // components: {
+  //   Dialog
+  // }
 })
 export default class ExDialog extends Vue {
   dialogVisible = false;

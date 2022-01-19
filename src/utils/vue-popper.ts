@@ -7,9 +7,9 @@ import { AnyObject } from "@/types";
 import { on, off } from "@/utils/dom";
 const stop = (e: Event) => e.stopPropagation();
 @Component({
-  name: "Popup"
+  name: "VuePopper"
 })
-export default class Popup extends Vue {
+export default class VuePopper extends Vue {
   @Prop({
     type: Boolean,
     default: false
