@@ -1,15 +1,15 @@
 import Dialog from "./components/dialog";
 import Popover from "./components/popover";
 
-export const componentList = {
+export const components = {
   Dialog,
   Popover
 }
 
 const install = (Vue) => {
-  Object.keys(componentList).map(key => {
-    const comp = componentList[key];
-    Vue.component(comp.name, comp);
+  Object.keys(components).map(compName => {
+    const comp = components[compName];
+    Vue.component(compName, comp);
   });
 };
 export default {

@@ -1,17 +1,16 @@
 {
   "name": "one-wsz-ui",
-  "version": "0.1.1",
+  "version": "0.1.14",
   "author": "772074834qq.com",
-  "publishConfig": {
-    "access": "public"
-  },
   "private": false,
-  "main": "dist/index.js",
+  "main": "lib/one-wsz-ui.umd.min.js",
   "files": [
-    "/src/*"
+    "/lib",
+    "/types"
   ],
   "typings": "types/index.d.ts",
   "scripts": {
+    "build:components": "vue-cli-service build --mode production --target lib --name one-wsz-ui --dest lib src/index.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"

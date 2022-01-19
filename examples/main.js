@@ -13,8 +13,7 @@ import router from "./router";
 import "normalize.css";
 import "@/theme/global.scss";
 
-import OneUi from "one-wsz-ui";
-// import OneUi from "../src/index";
+import OneUi from "../src/index";
 Vue.use(OneUi);
 
 // YuiComponent.config({ iconfont: "../" });
