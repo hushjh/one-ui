@@ -18,6 +18,11 @@ const router = new Router({
       component: Content,
       children: [
         {
+          path: "cityPicker",
+          name: "cityPicker",
+          component: CityPicker
+        },
+        {
           path: "dialog",
           name: "dialog",
           component: Dialog

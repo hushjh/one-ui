@@ -1,4 +1,4 @@
-import CityPicker from "./city-picker.js";
+import CityPicker from "./cityPicker.vue";
 CityPicker.install = (Vue) => {
   Vue.component(CityPicker.name, CityPicker);
 };
