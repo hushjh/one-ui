@@ -6,21 +6,35 @@
   >
     <div
       v-show="visible"
-      class="el-dialog__wrapper"
+      class="yn-dialog__wrapper"
       :style="style"
       @click.self="handleWrapperClick"
     >
-      <div class="el-dialog">
-        <div class="el-dialog__header">
-          <span class="el-dialog__title">{{title}}</span>
+      <div class="yn-dialog">
+        <div class="yn-dialog__header" v-if="showHeader">
+          <slot name="header">
+            <span class="yn-dialog__title">{{title}}</span>
+            <button class="yn-dialog__headerbtn" @click="handleClose">
+              <Icon name="close" class="yn-dialog__close"></Icon>
+            </button>
+          </slot>
         </div>
-        <div class="el-dialog__body">
+        <div class="yn-dialog__body" :class="{'is-overflowy': bodyOverflowY}">
           <slot>
             <span>这是一段信息</span>
           </slot>
         </div>
-        <div class="el-dialog__footer" v-if="$slots.footer">
-          <slot name="footer"></slot>
+        <div class="yn-dialog__footer" v-if="showFooter">
+          <slot name="footer">
+            <yn-button size="small"
+              @click="handleCancel"
+              v-if="cancelBtnShow"
+            >{{ cancleBtnName }}</yn-button>
+            <yn-button size="small" type="primary"
+              @click="handleConfirm"
+              v-if="confirmBtnShow"
+            >{{ confirmBtnName }}</yn-button>
+          </slot>
         </div>
       </div>
     </div>
@@ -29,48 +43,74 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Mixins, Prop  } from "vue-property-decorator";
-import Popup from "@/utils/popup";
+import Popup from "../../utils/popup";
+import Icon from "@/components/icon";
 import "./style/index.scss";
-import { AnyObject } from "@/types";
+import { AnyObject } from "../../types";
 @Component({
-  name: "Dialog"
+  name: "Dialog",
+  components: {
+    Icon
+  }
 })
 export default class Dialog extends Mixins(Vue, Popup) {
-  @Prop({
-    type: Boolean,
-    default: true
-  })
-  modal = true;
-  @Prop({
-    type: Boolean,
-    default: true
-  })
-  modalAppendToBody = true;
+  static componentName = "YnDialog";
   @Prop({
     type: Boolean,
     default: true
   })
   appendToBody!: boolean;
   @Prop({
-    type: Boolean,
-    default: true
+    type: String,
+    default: ""
   })
-  closeOnClickModal = true;
+  top!: string;
   @Prop({
     type: String,
     default: ""
   })
-  top!: string
-  @Prop({
-    type: String,
-    default: ""
-  })
-  width!: string
+  width!: string;
   @Prop({
     type: String,
     default: "提示"
   })
   title!: string;
+  @Prop({
+    type: String,
+    default: "取消"
+  })
+  cancleBtnName!: string;
+  @Prop({
+    type: String,
+    default: "确定"
+  })
+  confirmBtnName!: string;
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  cancelBtnShow!: boolean;
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  confirmBtnShow!: boolean;
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  showHeader!: boolean;
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  showFooter!: boolean;
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  bodyOverflowY!: boolean
+
 
   get style() {
     let style: AnyObject = {};
@@ -86,11 +126,19 @@ export default class Dialog extends Mixins(Vue, Popup) {
   }
   handleWrapperClick() {
     if (!this.closeOnClickModal) return;
-    this.handClose();
+    this.handleClose();
   }
-  handClose() {
+  handleClose() {
     this.$emit("update:visible", false);
     this.$emit("close", true);
+  }
+  handleCancel() {
+    this.$emit("cancel");
+    this.handleClose();
+  }
+  handleConfirm() {
+    this.$emit("confirm");
+    this.handleClose();
   }
   mounted() {
     if (this.appendToBody) {

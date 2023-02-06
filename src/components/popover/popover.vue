@@ -1,22 +1,25 @@
 <template>
   <span
-    class="el-popover__wrapper"
+    class="yn-popover__wrapper"
   >
     <transition
       :name="transition"
+      @before-enter="beforeEnter"
       @after-enter="afterEnter"
+      @before-leave="beforeLeave"
       @after-leave="afterLeave"
     >
       <div
-        class="el-popover"
+        class="yn-popper"
         ref="popper"
         v-show="visible"
         :style="style"
+        :class="popperClass"
       >
-        <div class="el-popover__title" v-if="title">
+        <div class="yn-popover__title" v-if="title">
           {{ title }}
         </div>
-        <div class="el-popover__content">
+        <div class="yn-popover__content">
           <slot>
             <span>这是popover弹框,这是popover弹框,这是popover弹框</span>
           </slot>
@@ -24,8 +27,8 @@
       </div>
     </transition>
     <span
-      class="el-reference"
-      ref="reference"
+      class="yn-popover__reference-wrapper"
+      ref="wrapper"
     >
       <slot name="reference"></slot>
     </span>
@@ -33,12 +36,12 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { Component, Mixins, Prop, Watch  } from "vue-property-decorator";
+import { Component, Mixins, Prop } from "vue-property-decorator";
 import "./style/index.scss";
 import "@/theme/transition.scss";
-import { AnyObject } from "@/types";
-import { on, off } from "@/utils/dom";
-import Popper from "@/utils/vue-popper";
+import { AnyObject } from "../../types";
+import { on, off, addClass } from "../../utils/dom";
+import Popper from "../../utils/vue-popper";
 
 @Component({
   name: "Popover"
@@ -47,6 +50,9 @@ export default class Popover extends Mixins(
   Vue,
   Popper
 ) {
+  static componentName = "YnPopover";
+  _timer = 0;
+
   @Prop({
     type: String,
     default: "click"
@@ -61,7 +67,20 @@ export default class Popover extends Mixins(
     type: String,
     default: ""
   })
-  title!: string
+  title!: string;
+  @Prop({
+    type: Array,
+    default: () => {
+      return [];
+    }
+  })
+  popperClass!: string[];
+  @Prop({
+    type: Number,
+    default: 200
+  })
+  closeDelay!: number;
+
   get style() {
     const style: AnyObject = {};
     if (this.width) style.width = this.width + "px";
@@ -73,7 +92,7 @@ export default class Popover extends Mixins(
   }
   handleDocumentClick(e: Event) {
     const domPop = this.$refs.popper as HTMLElement;
-    const domReference = this.$refs.reference as HTMLElement;
+    const domReference = this.referenceElm;
     const target = e.target as HTMLElement;
     if (!this.$el || this.$el.contains(target) ||
       !domPop || domPop.contains(target) ||
@@ -85,20 +104,39 @@ export default class Popover extends Mixins(
     }
   }
   handleMouseEnter() {
+    clearTimeout(this._timer);
     this.$emit("update:visible", true);
   }
   handleMouseLeave() {
-    this.$emit("update:visible", false);
+    clearTimeout(this._timer);
+    if(this.closeDelay) {
+      this._timer = setTimeout(() => {
+        this.$emit("update:visible", false);
+      }, this.closeDelay);
+    } else {
+      this.$emit("update:visible", false);
+    }
+  }
+  beforeEnter() {
+    this.$emit("beforeEnter");
   }
   afterEnter() {
     this.$emit("opend");
+  }
+  beforeLeave() {
+    this.$emit("beforeLeave");
   }
   afterLeave() {
     this.$emit("close");
   }
   mounted() {
-    let reference = this.$refs.reference as HTMLElement;
+    let reference = this.referenceElm = this.$refs.reference as HTMLElement;
     let poper = this.$refs.popper as HTMLElement;
+
+    if (!reference && (this.$refs.wrapper as HTMLElement).children) {
+      reference = this.referenceElm = (this.$refs.wrapper as HTMLElement).children[0] as HTMLElement;
+      addClass(reference, "yn-popover__reference");
+    }
     switch(this.trigger) {
       case "click": {
         on(reference, "click", this.toggle);
@@ -107,15 +145,15 @@ export default class Popover extends Mixins(
       }
       case "hover": {
         on(reference, "mouseenter", this.handleMouseEnter);
-        on(poper, "mounseenter", this.handleMouseEnter);
+        on(poper, "mouseenter", this.handleMouseEnter);
         on(reference, "mouseleave", this.handleMouseLeave);
-        on(poper, "mounseleave", this.handleMouseLeave);
+        on(poper, "mouseleave", this.handleMouseLeave);
         break;
       }
     }
   }
   beforeDestroy() {
-    let reference = this.$refs.reference as HTMLElement;
+    let reference = this.referenceElm as HTMLElement;
     off(reference, "click", this.toggle);
     off(document, "click", this.handleDocumentClick);
   }

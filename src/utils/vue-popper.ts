@@ -4,12 +4,12 @@ import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 import PopperJS from "@/utils/popper";
 import { AnyObject } from "@/types";
-import { on, off } from "@/utils/dom";
+import { on, off, addClass } from "@/utils/dom";
 const stop = (e: Event) => e.stopPropagation();
 @Component({
-  name: "VuePopper"
+  name: "Popup"
 })
-export default class VuePopper extends Vue {
+export default class Popup extends Vue {
   @Prop({
     type: Boolean,
     default: false
@@ -46,14 +46,26 @@ export default class VuePopper extends Vue {
   })
   arrowOffset!: number;
 
+  visibleArrowData = true;
+  showPopper = false;
   arrowAppended = false;
   currentPlacement = "";
-  popperJS: AnyObject | undefined = undefined;
+  popperJS: AnyObject | undefined | null = undefined;
   popperElm: HTMLElement | undefined = undefined;
   referenceElm: HTMLElement | undefined = undefined;
 
+  @Watch("visibleArrow", {
+    immediate: true
+  })
+  onVisibleArrow(n: boolean) {
+    this.visibleArrowData = n;
+  }
   @Watch("visible")
   onVisible(n: boolean) {
+    this.showPopper = n;
+  }
+  @Watch("showPopper")
+  onShowPopper(n: boolean) {
     if (n) {
       this.updatePopper();
       this.$nextTick(() => {
@@ -77,7 +89,10 @@ export default class VuePopper extends Vue {
     }
 
     if (!popper || !reference) return;
-    if (this.visibleArrow) this.appendArrow(popper);
+    if (!this.visibleArrowData) {
+      addClass(popper, "is-noarrow");
+    }
+    if (this.visibleArrowData) this.appendArrow(popper);
     if (this.appendToBody) document.body.appendChild(this.popperElm);
     if (this.popperJS && this.popperJS.destroy) {
       this.popperJS.destroy();
@@ -117,6 +132,12 @@ export default class VuePopper extends Vue {
     ele.appendChild(arrow);
     this.arrowAppended = true;
   }
+  doDestroy(forceDestroy: boolean) {
+    /* istanbul ignore if */
+    if (!this.popperJS || (this.showPopper && !forceDestroy)) return;
+    this.popperJS.destroy();
+    this.popperJS = null;
+  }
   handleResize() {
     this.updatePopper();
   }
@@ -124,6 +145,7 @@ export default class VuePopper extends Vue {
     on(document, "resize", this.handleResize)
   }
   beforeDestroy() {
+    this.doDestroy(true);
     off(document, "resize", this.handleResize)
     if (this.popperElm && this.popperElm.parentNode === document.body) {
       this.popperElm.removeEventListener('click', stop);

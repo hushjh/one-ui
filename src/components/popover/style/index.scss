@@ -1,5 +1,5 @@
-@import "src/theme/varible.scss";
-.el-popover{
+@import "src/theme/variable.scss";
+.yn-popper{
   position:absolute;
   background: #ffffff;
   border-radius: 4px;
@@ -7,14 +7,14 @@
   border: 1px solid #EBEEF5;
   box-sizing:border-box;
   padding: 18px 20px;
-  min-width: 180px;
+  min-width: 80px;
   word-break: break-all;
   text-align: justify;
   font-size: 14px;
   line-height: 1.4;
   color:#606266;
 }
-.el-popover__title{
+.yn-popover__title{
   margin-bottom: 12px;
   font-size:16px;
   line-height: 1;
@@ -32,7 +32,7 @@
 .popper__arrow::after{
   content: "";
 }
-.el-popover{
+.yn-popper{
   // placement top
   &[x-placement^="top"] {
     margin-bottom: #{$--popover-arrow-size + 6};
@@ -100,6 +100,20 @@
       margin-top:-6px;
       border-left-width: 0px;
       border-right-color: #ffffff;
+    }
+  }
+  &.is-noarrow{
+    &[x-placement^="top"] {
+      margin-bottom: 4px;
+    }
+    &[x-placement^="bottom"] {
+      margin-top: 4px;
+    }
+    &[x-placement^="left"] {
+      margin-right: 4px;
+    }
+    &[x-placement^="right"] {
+      margin-left: 4px;
     }
   }
 }
