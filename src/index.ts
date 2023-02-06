@@ -29,12 +29,18 @@ import Message from "@/components/message";
 import DatePicker from "@/components/datePicker";
 import Flex from "@/components/flex";
 import FlexItem from "@/components/flex-item";
+import Ellipsis from "@/components/ellipsis";
+import Swipe from "@/components/swipe";
+import SwipeItem from "@/components/swipe-item";
 
 interface MarsConfigOptions {
   [propName: string]: any;
 }
 const configOptions: MarsConfigOptions = {};
 export const components: AnyObject = {
+  SwipeItem,
+  Swipe,
+  Ellipsis,
   FlexItem,
   Flex,
   DatePicker,

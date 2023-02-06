@@ -1,0 +1,21 @@
+@import "src/theme/variable.scss";
+.ellipsis-page{
+  .ellipsis-item {
+    width: 200px;
+  }
+  .ellipsis-hotelname {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0;
+    line-height: 20px;
+    color: $yn-text-color;
+    margin: 4px 5px 4px 0;
+  }
+  .star-text {
+    font-size: 12px;
+    color: $yn-text-color-secondary;
+    letter-spacing: 0;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+}

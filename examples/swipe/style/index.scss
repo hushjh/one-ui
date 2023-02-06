@@ -1,0 +1,23 @@
+@import "src/theme/variable.scss";
+.swipe-page{
+  .swipe-box{
+    width: 400px;
+    height:400px;
+  }
+  .content{
+    font-size: 20px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .contnent--1{
+    background-color: red;
+  }
+  .contnent--2{
+    background-color: green;
+  }
+  .contnent--3{
+    background-color: blue;
+  }
+}

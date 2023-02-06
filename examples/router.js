@@ -29,6 +29,8 @@ import MessageBox from "./messageBox";
 import Message from "./message";
 import DatePicker from "./datePicker";
 import Flex from "./flex";
+import Ellipsis from "./ellipsis";
+import Swipe from "./swipe";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push (location) {
@@ -41,6 +43,16 @@ const router = new Router({
       name: "content",
       component: Content,
       children: [
+        {
+          path: "swipe",
+          name: "swipe",
+          component: Swipe
+        },
+        {
+          path: "ellipsis",
+          name: "ellipsis",
+          component: Ellipsis
+        },
         {
           path: "flex",
           name: "flex",

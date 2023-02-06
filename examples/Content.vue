@@ -35,6 +35,8 @@ export default {
   data() {
     return {
       routes: [
+        "swipe",
+        "ellipsis",
         "flex",
         "datePicker",
         "message",
